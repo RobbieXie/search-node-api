@@ -40,7 +40,10 @@ async function googleSearch(query) {
 async function bingSearch(query) {
   try {
     //https://serpapi.com/bing-search-api
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox']
+   });
     const page = await browser.newPage();
     await page.goto(
       `https://www.bing.com/search?form=QBRE&q=${encodeURIComponent(
