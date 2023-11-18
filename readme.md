@@ -12,18 +12,21 @@
 
 ### 原理
 
-原理很简单，使用 无头浏览器 去访问 Google，bing 等搜索网站，分析网页内容，提取摘要。
+原理很简单，使用 无头浏览器(puppeteer chrome) 去访问 baidu，bing 等搜索网站，分析网页内容，提取url,title,摘要。
 
 ## 已支持的搜索引擎
 
-bing/google/duckduckgo/yahoo
+baidu/bing/google/duckduckgo/yahoo
 
 ## 使用方式
 
 ```js
 curl --location 'http://localhost:3000' \
 --header 'Content-Type: application/json' \
---data '{"q":"nihao"}'
+--data '{
+    "q":"亚运会dota2中",
+    "engine":"bing"
+}'
 
 {
     "q": "nihao",

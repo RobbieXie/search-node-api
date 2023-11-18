@@ -11,7 +11,8 @@ app.use(async ctx => {
   // if nothing was parsed, body will be an empty object {}
 
   let question = ctx.request.body.q;
-  ctx.body = { q: question, results: await searchEngineTool(question, 'bing') };
+  let engine = ctx.request.body.engine ? ctx.request.body.engine : 'baidu';
+  ctx.body = { q: question, results: await searchEngineTool(question, engine) };
 });
 
 app.listen(3000);

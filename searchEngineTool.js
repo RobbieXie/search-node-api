@@ -3,11 +3,15 @@ const {
   bingSearch,
   yahooSearch,
   duckduckgoSearch,
+  baiduSearch
 } = require("./searchEngines");
 
 async function searchEngineTool(query, engine) {
   let results = [];
   switch (engine) {
+    case "baidu":
+      results = await baiduSearch(query);
+      break;
     case "google":
       results = await googleSearch(query);
       break;

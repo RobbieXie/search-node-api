@@ -46,14 +46,15 @@ async function bingSearch(query) {
    });
     const page = await browser.newPage();
     await page.goto(
-      `https://www.bing.com/search?form=QBRE&q=${encodeURIComponent(
+      `https://cn.bing.com/search?mkt=zh-cn&FORM=BEHPTB&q=${encodeURIComponent(
         query
-      )}&cc=US`
+      )}`
     );
     const summaries = await page.evaluate(() => {
       const liElements = Array.from(
         document.querySelectorAll("#b_results > .b_algo")
       );
+      console.log(liElements)
       const firstFiveLiElements = liElements.slice(0, 5);
       return firstFiveLiElements.map((li) => {
         const linkElement = li.querySelector("a");
@@ -64,7 +65,46 @@ async function bingSearch(query) {
         if (abstract.length > 3) {
           abstract = abstract.substring(3, abstract.length);
         }
-        
+        return { href, title , abstract};
+      });
+    });
+    await browser.close();
+    console.log(summaries);
+    return summaries;
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+}
+
+async function baiduSearch(query) {
+  try {
+    //https://serpapi.com/bing-search-api
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox']
+   });
+    const page = await browser.newPage();
+    console.log(`https://www.baidu.com/s?wd=${encodeURIComponent(
+      query
+    )}`);
+    await page.goto(
+      `https://www.baidu.com/s?wd=${encodeURIComponent(
+        query
+      )}`
+    );
+    const summaries = await page.evaluate(() => {
+      const contentDivEle = document.querySelector("#content_left");
+      const firstFiveDivElements = Array.from(contentDivEle.querySelectorAll("div[class='c-container']")).slice(0, 5); // trick
+      // const firstFiveLiElements = liElements.slice(0, 5);
+      return firstFiveDivElements.map((div) => {
+        const linkElement = div.querySelector('h3').querySelector('a');
+        const href = linkElement.getAttribute("href");
+        const title = linkElement.textContent;
+        const abstractEle = div.querySelector("span[class^='content-right']");
+        let abstract = abstractEle ? abstractEle.textContent : "";
+        if (abstract.length > 3) {
+          abstract = abstract.substring(3, abstract.length);
+        }
         return { href, title , abstract};
       });
     });
@@ -148,4 +188,5 @@ module.exports = {
   bingSearch,
   yahooSearch,
   duckduckgoSearch,
+  baiduSearch
 };
