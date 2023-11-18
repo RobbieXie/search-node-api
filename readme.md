@@ -20,6 +20,10 @@ baidu/bing/google/duckduckgo/yahoo
 
 ## 使用方式
 
+Docker:
+docker run -d -p your_port:3000 talentxiet/search-node-api-docker:v1.5
+
+http api:
 ```js
 curl --location 'http://localhost:3000' \
 --header 'Content-Type: application/json' \
